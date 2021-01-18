@@ -1,0 +1,12 @@
+{
+    "name": "Pinnacle Count",
+    "description": "Counts rows on a Pinnacle Table",
+    "version": "0.1",
+    "manifest_version": 2,
+    "permissions": [
+        "activeTab"
+    ],
+    "browser_action": {
+        "default_popup": "popup.html"
+    }
+}
