@@ -4,7 +4,9 @@
     "version": "0.1",
     "manifest_version": 2,
     "permissions": [
-        "activeTab"
+        "activeTab",
+        "tabs",
+        "https://pharmoutcomes.org/*"
     ],
     "browser_action": {
         "default_popup": "popup.html"

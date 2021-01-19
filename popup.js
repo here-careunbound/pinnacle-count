@@ -1,18 +1,43 @@
-
-function display(results) {
+function updatePopup(results) {
     console.log(results)
+    if (!results[0]) return
     var data = results[0]
     var dates = data.dates
     var keys = Object.keys(dates)
-    var text = ''
+    var htmlString = ''
     for (var i = 0; i < keys.length; ++i) {
-        text = text + '<div style=\'margin-bottom: 5px;\'><h3 style=\'margin-bottom: 0px;\'>' + keys[i] + '</h3><div>Active: ' + dates[keys[i]].active + '</div><div>Pending: ' + dates[keys[i]].pendingCompletion + '</div><div>Cancelled: ' + dates[keys[i]].cancelled + '</div><div>Other: ' + dates[keys[i]].other + '</div><div>Total: ' + dates[keys[i]].total + '</div></div>'
+        htmlString = htmlString + `<table class="table table-hover table-sm">
+        <thead>
+        <tr>
+        <th scope="col">${keys[i]}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>Active: ${dates[keys[i]].active}</td>
+        </tr>
+        <tr>
+        <td>Pending: ${dates[keys[i]].pendingCompletion}</td>
+        </tr>
+        <tr>
+        <td>Cancelled: ${dates[keys[i]].cancelled}</td>
+        </tr>
+        <tr>
+        <td>Other: ${dates[keys[i]].other}</td>
+        </tr>
+        <tr>
+        <td>Total: ${dates[keys[i]].total}</td>
+        </tr>
+        </tbody>
+        </table>`
     }
-    text = text + '<div></div>'
-    document.getElementById("textBox").innerHTML = text
+    htmlString = htmlString + '<div></div>'
+    document.getElementById("textBox").innerHTML = htmlString
 
 
     var link = document.createElement("a");
+    link.classList.add("btn")
+    link.classList.add("btn-primary")
     link.textContent = 'Download CSV. Caution - contains PID'
     link.setAttribute("href", results[0].encodedUri);
     link.setAttribute("download", "pinnacle.csv");
@@ -22,6 +47,8 @@ function display(results) {
 }
 
 function code() {
+    if (window.location.hostname !== 'pharmoutcomes.org') return
+
     var tbl = document.getElementsByTagName("table")[0]
     var tbody = tbl.firstElementChild
     var totalRows = tbody.children.length
@@ -126,9 +153,10 @@ function code() {
     }
 }
 
-chrome.tabs.query({ active: true }, function (tabs) {
+chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    // This should lock onto the active tab in the active window
     var tab = tabs[0];
     chrome.tabs.executeScript(tab.id, {
         code: '(' + code.toString() + ')();'
-    }, display);
+    }, updatePopup);
 });
