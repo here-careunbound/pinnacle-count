@@ -14,7 +14,7 @@ function updatePopup(results) {
         </thead>
         <tbody>
         <tr>
-        <td>Active: ${dates[keys[i]].active}</td>
+        <td>Completed: ${dates[keys[i]].active}</td>
         </tr>
         <tr>
         <td>Pending: ${dates[keys[i]].pendingCompletion}</td>
@@ -38,7 +38,7 @@ function updatePopup(results) {
     var link = document.createElement("a");
     link.classList.add("btn")
     link.classList.add("btn-primary")
-    link.textContent = 'Download CSV. Caution - contains PID'
+    link.textContent = 'Download CSV Caution - contains PID'
     link.setAttribute("href", results[0].encodedUri);
     link.setAttribute("download", "pinnacle.csv");
     document.body.appendChild(link); // Required for FF
@@ -91,7 +91,8 @@ function code() {
         // update counters
         total++
         dates[date].total++
-        if (item.innerHTML.includes('<span class="active">Active</span>')) {
+        if (item.innerHTML.includes('<span class="active">Active</span>')
+            || item.innerHTML.includes('<span class="active">Completed</span>')) {
             dates[date].active++
             totalActive++
         } else if (item.innerHTML.includes('<span class="warning">Pending</span> <br><small>awaiting completion</small>')) {
