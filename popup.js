@@ -47,9 +47,10 @@ function updatePopup(results) {
 }
 
 function code() {
-    if (window.location.hostname !== 'pharmoutcomes.org') return
+    if (window.location.hostname !== 'outcomes4health.org') return
 
     var tbl = document.getElementsByTagName("table")[0]
+
     var tbody = tbl.firstElementChild
     var totalRows = tbody.children.length
 
