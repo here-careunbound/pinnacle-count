@@ -1,9 +1,8 @@
 function updatePopup(results) {
-    console.log(results)
     if (!results[0]) return
     var data = results[0]
     var dates = data.dates
-    var keys = Object.keys(dates)
+    var keys = Object.keys(dates).reverse()
     var htmlString = ''
     for (var i = 0; i < keys.length; ++i) {
         htmlString = htmlString + `<table class="table table-hover table-sm">
@@ -61,7 +60,7 @@ function code() {
     var dates = {
 
     }
-    var csv = 'data:text/csv;charset=utf-8,"Date","Date of Birth","Vaccine Number","User","Status"\n'
+    var csv = 'data:text/csv;charset=utf-8,"Date","Name","NHS Number","Postcode","Date of Birth","Vaccine Number","User","Status"\n'
 
     for (var i = 1; i < totalRows; ++i) { //skip first row!
 
@@ -106,13 +105,17 @@ function code() {
             dates[date].other++
             totalOther++
         }
-        var pid = item.children[2].textContent
-        var dob = getDate(pid)
-        // console.log(pid, dob)
-        var vaccNum = item.children[4].textContent.replace(/[^a-zA-Z ]/g, "")
-        var user = item.children[5].textContent.replace(/[^a-zA-Z ]/g, "")
+
+        var pid = item.children[2].textContent.split(/\u2022/)
+
+        var dob = pid[2].replace(/[^a-zA-Z0-9\- ]/g, "") //just letters and numbers and -
+        var name = pid[1].replace(/[^a-zA-Z0-9 ]/g, "") //just letters and numbers
+        var nhs = pid[3].replace(/[^a-zA-Z0-9 ]/g, "") //just letters and numbers
+        var postcode = pid[4].replace(/[^a-zA-Z0-9 ]/g, "") //just letters and numbers
+        var vaccNum = item.children[4].textContent.replace(/[^a-zA-Z ]/g, "") //just letters
+        var user = item.children[5].textContent.replace(/[^a-zA-Z ]/g, "") //just letters
         var status = item.children[6].textContent.replace(/[^a-zA-Z ]/g, "").replace('ClicktoCancel', "").replace('Click to reinstate', "")
-        csv += '"' + date + '","' + dob + '","' + vaccNum + '","' + user + '","' + status + '"\n'
+        csv += '"' + date + '","' + name + '","' + nhs + '","' + postcode + '","' + dob + '","' + vaccNum + '","' + user + '","' + status + '"\n'
 
 
     }
@@ -125,34 +128,6 @@ function code() {
     return data
 
 
-
-
-    function getDate(d) {
-        var day, month, year;
-
-        result = d.match("[0-9]{2}([\-/ \.])[0-9]{2}[\-/ \.][0-9]{4}");
-        if (null != result) {
-            dateSplitted = result[0].split(result[1]);
-            day = dateSplitted[0];
-            month = dateSplitted[1];
-            year = dateSplitted[2];
-        }
-        result = d.match("[0-9]{4}([\-/ \.])[0-9]{2}[\-/ \.][0-9]{2}");
-        if (null != result) {
-            dateSplitted = result[0].split(result[1]);
-            day = dateSplitted[2];
-            month = dateSplitted[1];
-            year = dateSplitted[0];
-        }
-
-        if (month > 12) {
-            aux = day;
-            day = month;
-            month = aux;
-        }
-
-        return year + "-" + month + "-" + day;
-    }
 }
 
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
