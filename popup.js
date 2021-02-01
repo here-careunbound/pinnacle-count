@@ -60,13 +60,17 @@ function code() {
     var dates = {
 
     }
-    var csv = 'data:text/csv;charset=utf-8,"Date","Name","NHS Number","Postcode","Date of Birth","Vaccine Number","User","Status"\n'
+    var csv = 'data:text/csv;charset=utf-8,"Pinnacle Id","Date","Name","NHS Number","Postcode","Date of Birth","Vaccine Number","User","Status"\n'
 
     for (var i = 1; i < totalRows; ++i) { //skip first row!
 
         var item = tbody.children[i];
         var firstCol = item.firstElementChild
         var date = firstCol.textContent.substring(0, 10)
+        var href = firstCol.firstElementChild.getAttribute("href")
+
+        var qs = new URLSearchParams(href.substring(href.search('\\?'), href.length))
+        var pinId = qs.get('edit')
 
         // check objects initialised
         if (dates[date] == undefined) {
@@ -115,7 +119,7 @@ function code() {
         var vaccNum = item.children[4].textContent.replace(/[^a-zA-Z ]/g, "") //just letters
         var user = item.children[5].textContent.replace(/[^a-zA-Z ]/g, "") //just letters
         var status = item.children[6].textContent.replace(/[^a-zA-Z ]/g, "").replace('ClicktoCancel', "").replace('Click to reinstate', "")
-        csv += '"' + date + '","' + name + '","' + nhs + '","' + postcode + '","' + dob + '","' + vaccNum + '","' + user + '","' + status + '"\n'
+        csv += '"' + pinId + '","' + date + '","' + name + '","' + nhs + '","' + postcode + '","' + dob + '","' + vaccNum + '","' + user + '","' + status + '"\n'
 
 
     }
