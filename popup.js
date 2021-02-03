@@ -1,10 +1,16 @@
-function updatePopup(results) {
+const updatePopup = results => {
     if (!results[0]) return
-    var data = results[0]
-    var dates = data.dates
-    var keys = Object.keys(dates).reverse()
-    var htmlString = ''
-    for (var i = 0; i < keys.length; ++i) {
+    const data = results[0]
+    if (typeof data === 'string') {
+        const txtBox = document.getElementById("textBox")
+        txtBox.textContent = data
+        txtBox.classList.add('text-danger')
+        return
+    }
+    const dates = data.dates
+    const keys = Object.keys(dates).reverse()
+    let htmlString = ''
+    for (let i = 0; i < keys.length; ++i) {
         htmlString = htmlString + `<table class="table table-hover table-sm">
         <thead>
         <tr>
@@ -34,10 +40,8 @@ function updatePopup(results) {
     document.getElementById("textBox").innerHTML = htmlString
 
 
-    var link = document.createElement("a");
-    link.classList.add("btn")
-    link.classList.add("btn-primary")
-    link.textContent = 'Download CSV Caution - contains PID'
+    const link = document.getElementById("downloadBtn");
+    link.classList.remove("disabled")
     link.setAttribute("href", results[0].encodedUri);
     link.setAttribute("download", "pinnacle.csv");
     document.body.appendChild(link); // Required for FF
@@ -45,10 +49,10 @@ function updatePopup(results) {
 
 }
 
-function code() {
-    if (window.location.hostname !== 'outcomes4health.org') return
-
+const code = () => {
+    if (window.location.hostname !== 'outcomes4health.org') return 'This extension only works on outcomes4health.org'
     var tbl = document.getElementsByTagName("table")[0]
+    if (!tbl) return 'Cannot find data on this page - make sure you are on the \'Full Provision History\' page.'
 
     var tbody = tbl.firstElementChild
     var totalRows = tbody.children.length
@@ -110,15 +114,22 @@ function code() {
             totalOther++
         }
 
-        var pid = item.children[2].textContent.split(/\u2022/)
+        let dob = ''
+        let name = ''
+        let nhs = ''
+        let postcode = ''
 
-        var dob = pid[2].replace(/[^a-zA-Z0-9\- ]/g, "") //just letters and numbers and -
-        var name = pid[1].replace(/[^a-zA-Z0-9 ]/g, "") //just letters and numbers
-        var nhs = pid[3].replace(/[^a-zA-Z0-9 ]/g, "") //just letters and numbers
-        var postcode = pid[4].replace(/[^a-zA-Z0-9 ]/g, "") //just letters and numbers
-        var vaccNum = item.children[4].textContent.replace(/[^a-zA-Z ]/g, "") //just letters
-        var user = item.children[5].textContent.replace(/[^a-zA-Z ]/g, "") //just letters
-        var status = item.children[6].textContent.replace(/[^a-zA-Z ]/g, "").replace('ClicktoCancel', "").replace('Click to reinstate', "")
+        const pid = item.children[2].textContent.split(/\u2022/)
+        if (pid.length >= 5) {
+            dob = pid[2].replace(/[^a-zA-Z0-9\- ]/g, "") //just letters and numbers and -
+            name = pid[1].replace(/[^a-zA-Z0-9 ]/g, "") //just letters and numbers
+            nhs = pid[3].replace(/[^a-zA-Z0-9 ]/g, "") //just letters and numbers
+            postcode = pid[4].replace(/[^a-zA-Z0-9 ]/g, "") //just letters and numbers
+        }
+
+        const vaccNum = item.children[4].textContent.replace(/[^a-zA-Z ]/g, "") //just letters
+        const user = item.children[5].textContent.replace(/[^a-zA-Z ]/g, "") //just letters
+        const status = item.children[6].textContent.replace(/[^a-zA-Z ]/g, "").replace('ClicktoCancel', "").replace('Click to reinstate', "")
         csv += '"' + pinId + '","' + date + '","' + name + '","' + nhs + '","' + postcode + '","' + dob + '","' + vaccNum + '","' + user + '","' + status + '"\n'
 
 

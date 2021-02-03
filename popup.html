@@ -8,11 +8,18 @@
 
 <body style="min-width:200px;min-height:300px;" class="p-2">
 
-    <small class="text-muted">Version 1.4</small>
-    <div id="textBox">Make sure you are on the new URL - outcomes4health.org! Could not find Pinnacle table - make sure
-        you are on Services -> View all provisions for All
-        Services
-        (show)</div>
+    <small class="text-muted">Version 1.5</small>
+    <div style="min-height: 100px;" class="mb-3" id="textBox">
+        <div class="text-center">
+            <div class="spinner-border m-4 text-primary" style="width: 3rem; height: 3rem;" role="status">
+            </div>
+        </div>
+    </div>
+    <div>
+        <a id="downloadBtn" class="d-block btn btn-primary disabled">Download CSV</a>
+        <small>Note: the patient identifiable fields will only export if you have ticked the show patient identifiers
+            box.</small>
+    </div>
     <script type="text/javascript" src="popup.js"></script>
 </body>
 
