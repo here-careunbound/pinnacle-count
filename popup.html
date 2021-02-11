@@ -6,9 +6,14 @@
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
 </head>
 
-<body style="min-width:200px;min-height:300px;" class="p-2">
+<body style="min-width:300px;min-height:300px;" class="p-2">
 
-    <small class="text-muted">Version 1.5</small>
+    <small class="text-muted d-block">Version 1.6</small>
+    <small id="10k" style="line-height: 1.2" class="text-danger d-none">This organisation has hit 10K records - only the
+        most
+        recent 10K records can be
+        shown.
+        The oldest day shown here may be incomplete.</small>
     <div style="min-height: 100px;" class="mb-3" id="textBox">
         <div class="text-center">
             <div class="spinner-border m-4 text-primary" style="width: 3rem; height: 3rem;" role="status">
@@ -16,8 +21,10 @@
         </div>
     </div>
     <div>
-        <a id="downloadBtn" class="d-block btn btn-primary disabled">Download CSV</a>
-        <small>Note: the patient identifiable fields will only export if you have ticked the show patient identifiers
+        <a id="downloadBtn" class="d-block btn btn-primary disabled mb-2">Download CSV</a>
+        <small class="text-muted d-block mb-2" style="line-height: 1.2">Note: the patient identifiable fields will only
+            export if you have ticked the
+            show patient identifiers
             box.</small>
     </div>
     <script type="text/javascript" src="popup.js"></script>

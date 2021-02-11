@@ -7,6 +7,13 @@ const updatePopup = results => {
         txtBox.classList.add('text-danger')
         return
     }
+
+    if (data.hit10k) {
+        const hit10k = document.getElementById("10k")
+        hit10k.classList.remove("d-none")
+        hit10k.classList.add("d-block")
+    }
+
     const dates = data.dates
     const keys = Object.keys(dates).reverse()
     let htmlString = ''
@@ -44,7 +51,7 @@ const updatePopup = results => {
     link.classList.remove("disabled")
     link.setAttribute("href", results[0].encodedUri);
     link.setAttribute("download", "pinnacle.csv");
-    document.body.appendChild(link); // Required for FF
+
     // link.click();
 
 }
@@ -64,11 +71,17 @@ const code = () => {
     var dates = {
 
     }
+    var hit10k = false
     var csv = 'data:text/csv;charset=utf-8,"Pinnacle Id","Date","Name","NHS Number","Postcode","Date of Birth","Vaccine Number","User","Status"\n'
 
     for (var i = 1; i < totalRows; ++i) { //skip first row!
 
         var item = tbody.children[i];
+        if (item.textContent.includes('There are more records, but we have already listed 10000')) {
+            hit10k = true
+            continue
+        }
+
         var firstCol = item.firstElementChild
         var date = firstCol.textContent.substring(0, 10)
         var href = firstCol.firstElementChild.getAttribute("href")
@@ -137,7 +150,7 @@ const code = () => {
 
     var encodedUri = encodeURI(csv);
     var data = {
-        total, totalActive, totalPendingCompletion, totalOther, dates, encodedUri
+        total, totalActive, totalPendingCompletion, totalOther, dates, encodedUri, hit10k
     }
 
     return data
